@@ -4,14 +4,22 @@ services:
   api:
     build:
       ./api
+    restart: always
     ports: 
       - "5000:5000"
   db:
-    image: mysql
+    image: postgres
+    restart: always
     ports:
-      - "3306:3306"
+      - "5432:5432"
+    volumes:
+      - /Users/jessicastuart/Library/Application Support/Postgres/var-9.6:/var/lib/postgresql/data
     environment:
-      MYSQL_DATABASE: tram
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_DB: tram
+      POSTGRES_PASSWORD: password
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
 
