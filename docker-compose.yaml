@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - /Users/jessicastuart/Library/Application Support/Postgres/var-9.6:/var/lib/postgresql/data
+      - ${HOME}/tram_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: tram
       POSTGRES_PASSWORD: password
