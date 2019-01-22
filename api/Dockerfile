@@ -14,10 +14,10 @@ WORKDIR /home/tram
 RUN pip install -r requirements.txt
 
 #set flask env variable within container
-ENV FLASK_APP app.py
+ENV FLASK_APP run.py
 
 #create entry points for running app
 ENTRYPOINT ["python"]
 
 #create command to run app
-CMD ["app.py"]
+CMD ["run.py"]
