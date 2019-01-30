@@ -1,6 +1,9 @@
 #install base python image
 FROM python:3.6-alpine
 
+# Install postgressql linux library config packages
+RUN apk update && apk add build-base postgresql-dev
+
 #set default user to tram
 RUN adduser -D tram
 

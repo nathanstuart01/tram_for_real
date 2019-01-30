@@ -9,6 +9,8 @@ services:
       - "5000:5000"
     env_file:
       - ./api/flask-variables.env
+    volumes:
+      - ./api:/home/tram
   db:
     image: postgres
     restart: always
