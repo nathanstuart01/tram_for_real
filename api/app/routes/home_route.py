@@ -1,5 +1,5 @@
 from app import app
 
 @app.route('/')
-def home_route():
-    return 'Hey, we have Tram in a Docker container!'
+def home_and_login_route():
+    return 'Tram home'
