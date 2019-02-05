@@ -11,6 +11,11 @@ services:
       - ./api/flask-variables.env
     volumes:
       - ./api:/home/tram
+  frontend:
+    build:
+      ./frontend
+    volumes:
+      - ./frontend:/path/to/react/code
   db:
     image: postgres
     restart: always

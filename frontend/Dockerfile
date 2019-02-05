@@ -1,0 +1,26 @@
+#install base python image
+FROM node:8.15.0-alpine
+
+# Install postgressql linux library config packages
+#RUN apk update && apk add build-base postgresql-dev
+
+#set default user to tram
+#RUN adduser -D tram
+
+#copy all contents in present directory to specified directory on container
+#COPY . /home/tram
+
+#set working directory
+#WORKDIR /home/tram
+
+#install all app dependicies and packages
+#RUN pip install -r requirements.txt
+
+#set flask env variable within container
+#ENV FLASK_APP run.py
+
+#create entry points for running app
+#ENTRYPOINT ["python"]
+
+#create command to run app
+#CMD ["run.py"]
