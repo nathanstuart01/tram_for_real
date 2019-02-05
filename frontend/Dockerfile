@@ -1,26 +1,17 @@
-#install base python image
+# use docker hub node.js image for react
 FROM node:8.15.0-alpine
 
-# Install postgressql linux library config packages
-#RUN apk update && apk add build-base postgresql-dev
-
 #set default user to tram
-#RUN adduser -D tram
-
-#copy all contents in present directory to specified directory on container
-#COPY . /home/tram
+RUN adduser -D tram
 
 #set working directory
-#WORKDIR /home/tram
+WORKDIR /home/frontend
 
-#install all app dependicies and packages
-#RUN pip install -r requirements.txt
+#install react
+RUN npx create-react-app frontend
 
-#set flask env variable within container
-#ENV FLASK_APP run.py
+#copy all contents in present directory to specified directory on container
+COPY . /home/frontend
 
-#create entry points for running app
-#ENTRYPOINT ["python"]
+CMD npm start
 
-#create command to run app
-#CMD ["run.py"]
