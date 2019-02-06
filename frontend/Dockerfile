@@ -10,6 +10,9 @@ WORKDIR /home/frontend
 #install react
 RUN npx create-react-app frontend
 
+#install react-router-for-web
+RUN npm install --save react-router-dom
+
 #copy all contents in present directory to specified directory on container
 COPY . /home/frontend
 
