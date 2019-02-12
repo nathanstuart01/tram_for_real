@@ -1,6 +1,6 @@
 from app import app, db
 from app.models.user import User
-from flask import request, jsonify, abort, session
+from flask import request, jsonify, abort, session, make_response
 
 # will need to make these requests over a secure http
 # this route will be included in the signup view page
@@ -26,9 +26,9 @@ def create_user():
 #diagram out the steps needed to login and access protected resources
 @app.route('/api/login', methods=['POST'])
 def login_user():
-    email = request.json.get('email')
+    username = request.json.get('username')
     password = request.json.get('password')
-    user = User.query.filter_by(email=email).first()
+    user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
         session['logged_in'] = True
         status = 'logged in'
