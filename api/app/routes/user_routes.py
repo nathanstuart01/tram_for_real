@@ -1,6 +1,6 @@
 from app import app, db
 from app.models.user import User
-from flask import request, jsonify, abort, session, make_response
+from flask import request, jsonify, abort
 from flask_jwt_extended import (create_access_token, create_refresh_token, 
                                 jwt_required, jwt_refresh_token_required, 
                                 get_jwt_identity, get_raw_jwt)
@@ -41,12 +41,20 @@ def login_user():
     password = request.json.get('password')
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
-        session['logged_in'] = True
-        status = 'logged in'
+        access_token = create_access_token(identity=username)
+        refresh_token = create_refresh_token(identity=username)
+        return jsonify({'status': 'logged in as ' + username,
+                        'access_token': access_token,
+                        'refresh_token': refresh_token
+                    })
     else:
-        status = 'invalid login credentials, please try again'
+        return jsonify({'message': 'invalid login credentials, please try again'})
 
-    return jsonify({'result': status})
+@app.route('/api/home', methods=['GET'])
+@jwt_required
+def home():
+    return jsonify({'message': 'the secret user stuff'})
 
+# make a list of all the resoucres I will need to build out
 
 
