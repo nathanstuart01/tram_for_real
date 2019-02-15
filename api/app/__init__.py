@@ -2,14 +2,16 @@ from flask import Flask
 from instance.config import DevelopmentConfig
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
 
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(DevelopmentConfig)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-login = LoginManager(app)
+bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
 
 from app.routes import home_route, user_routes
 from app.models import user

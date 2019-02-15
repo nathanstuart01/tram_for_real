@@ -1,6 +1,9 @@
 from app import app, db
 from app.models.user import User
 from flask import request, jsonify, abort, session, make_response
+from flask_jwt_extended import (create_access_token, create_refresh_token, 
+                                jwt_required, jwt_refresh_token_required, 
+                                get_jwt_identity, get_raw_jwt)
 
 # will need to make these requests over a secure http
 # this route will be included in the signup view page
@@ -16,14 +19,22 @@ def create_user():
         abort(400) #existing user
     if User.query.filter_by(email = email).first() is not None:
         abort(400) #existing email
-    user = User(username = username, email = email)
-    user.set_password(password)
-    db.session.add(user)
-    db.session.commit()
-    return jsonify({'username': user.username}), 201
+    try:
+        user = User(username = username, email = email)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        access_token = create_access_token(identity=username)
+        refresh_token = create_refresh_token(identity=username)
+        return jsonify({'message': 'user was created',
+                        'username': user.username,
+                        'access_token': access_token,
+                        'refresh_token': refresh_token}), 201
+    except:
+        return jsonify({'message': 'Something went wrong when registering your username'}), 500
 
-# create a login route for an already created user
-#diagram out the steps needed to login and access protected resources
+# add in data verification to only allow for string type reqs, not blank, error handling for incorrect login attempts
+# # add in lock account after 5 failed attempts
 @app.route('/api/login', methods=['POST'])
 def login_user():
     username = request.json.get('username')
