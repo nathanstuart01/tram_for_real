@@ -13,5 +13,6 @@ migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-from app.routes import home_route, user_routes
-from app.models import user
+from app.routes import user_routes
+from app.routes.trips_routes import rider_routes
+from app.models import user, trip, driver, rider

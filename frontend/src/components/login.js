@@ -21,7 +21,7 @@ class Login extends React.Component {
             headers: {
               "Content-Type": "application/json"
             },
-        }).then(res => res.json())
+        }).then(res => console.log(res))
             .then(data => console.log(data))
             .catch(error => console.error('Error:', error)); 
         }
