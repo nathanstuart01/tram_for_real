@@ -14,5 +14,5 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 from app.routes import user_routes
-from app.routes.trips_routes import rider_routes
+from app.routes.rider_routes import rider_routes
 from app.models import user, trip, driver, rider
