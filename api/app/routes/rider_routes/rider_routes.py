@@ -1,4 +1,4 @@
-from app import app, jwt, db
+from app import app, db, jwt
 from app.models.rider import Rider
 from flask import request, jsonify, abort
 from flask_jwt_extended import jwt_required
@@ -6,11 +6,10 @@ from flask_jwt_extended import jwt_required
 @app.route('/api/create_rider', methods=['POST'])
 @jwt_required
 def create_rider():
-    import pdb;pdb.set_trace()
     # if yes, return success and name of created rider fields
     first_name = request.json.get('first_name')
     last_name = request.json.get('last_name')
-    if first_name or last_name is None:
+    if first_name is None or last_name is None:
         message = 'Invalid rider inputs, please fill in both a first and last name'
         abort(400, message)
     try:
