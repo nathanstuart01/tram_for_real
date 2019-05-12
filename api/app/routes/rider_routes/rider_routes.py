@@ -1,4 +1,4 @@
-from app import app, db, jwt
+from app.app import app, db, jwt
 from app.models.rider import Rider
 from flask import request, jsonify, abort
 from flask_jwt_extended import jwt_required
@@ -6,7 +6,6 @@ from flask_jwt_extended import jwt_required
 @app.route('/api/create_rider', methods=['POST'])
 @jwt_required
 def create_rider():
-    # if yes, return success and name of created rider fields
     first_name = request.json.get('first_name')
     last_name = request.json.get('last_name')
     if first_name is None or last_name is None:
@@ -22,4 +21,5 @@ def create_rider():
                         }), 201
     except:
         return jsonify({'Message': 'New rider was not able to be created, something went wrong'}), 500
+
 

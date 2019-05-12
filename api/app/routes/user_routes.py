@@ -1,4 +1,4 @@
-from app import app, db, jwt
+from app.app import app, db, jwt
 from app.models.user import User
 from flask import request, jsonify, abort
 from flask_jwt_extended import (JWTManager, create_access_token, create_refresh_token, 

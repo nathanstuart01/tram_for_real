@@ -1,4 +1,4 @@
-from app import db
+from app.app import db
 
 class Rider(db.Model):
     id = db.Column(db.Integer, primary_key=True)
