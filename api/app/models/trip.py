@@ -1,5 +1,6 @@
 from app.app import db
 import datetime
+from app.models.riders import trip_riders 
 
 class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -9,5 +10,5 @@ class Trip(db.Model):
     return_date = db.Column(db.DateTime(timezone=True), nullable=False)
     available_seats = db.Column(db.Integer, nullable=False)
     driver_id = db.Column(db.Integer, db.ForeignKey('driver.id'), nullable=False)
-    riders = db.relationship('Rider', secondary=riders, lazy='subquery',
+    riders = db.relationship('Rider', secondary=trip_riders, lazy='subquery',
     	backref=db.backref('riders', lazy=True))
