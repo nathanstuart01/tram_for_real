@@ -36,3 +36,16 @@ def create_trip():
                         }), 201
     except:
         return jsonify({'Message': 'New trip was not able to be created, something went wrong'}), 500
+
+@app.route('/api/joinable_trips', methods=['POST'])
+@jwt_required
+def show_joinable_trips():
+    trip_departure_date = request.json.get('departure_date')
+    if not all([trip_departure_date]):
+        message = 'Invalid trip date, please try inputting trip date again'
+        abort(400, message)
+    try:
+        selected_trips = Trip.query.filter(Trip.departure_date >= trip_departure_date).filter(Trip.available_seats > 0).all()
+        return jsonify({'Available Trips for Selected Date': selected_trips[0].id}), 200
+    except:
+        return jsonify({'Message': "Specified trips were not able to be returned, something went wrong"}), 500
