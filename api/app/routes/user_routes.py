@@ -7,6 +7,13 @@ from flask_jwt_extended import (JWTManager, create_access_token, create_refresh_
                                 set_access_cookies, set_refresh_cookies, unset_jwt_cookies)
 
 
+@jwt.user_claims_loader
+def add_claims_to_access_token(identity):
+    return {
+        'user_id': identity['user_id'],
+        'username': identity['username']
+    }
+
 @app.route('/api/create_user', methods=['POST'])
 def create_user():
     username = request.json.get('username')
@@ -24,12 +31,9 @@ def create_user():
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
-        access_token = create_access_token(identity=username)
-        refresh_token = create_refresh_token(identity=username)
         return jsonify({'message': 'user was created',
                         'username': user.username,
-                        'access_token': access_token,
-                        'refresh_token': refresh_token}), 201
+                        'email': user.email}), 201
     except:
         return jsonify({'message': 'Something went wrong when registering your username'}), 500
 
@@ -39,7 +43,8 @@ def login_user():
     password = request.json.get('password')
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
-        access_token = create_access_token(identity=username)
+        user_object = {"user_id": user.id, "username": username}
+        access_token = create_access_token(identity=user_object)
         resp = jsonify({'login': True, 'access_token': access_token})
         return resp, 200
     else:

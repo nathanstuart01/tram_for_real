@@ -13,10 +13,13 @@ class Trip(db.Model):
     riders = db.relationship('Rider', secondary=trip_riders, lazy='subquery',
     	backref=db.backref('riders', lazy=True))
     
-    def subtract_available_seat(self):
+    def remove_rider_from_trip(self, rider_id):
+        self.available_seats = self.available_seats + 1
+        self.riders.remove(rider_id)
+        db.session.commit()
+    
+    def add_rider_to_trip(self, rider_id):
+        self.riders.append(rider_id)
         self.available_seats = self.available_seats - 1
         db.session.commit()
 
-    def add_available_seat(self):
-        self.available_seats = self.available_seats + 1
-        db.session.commit()
