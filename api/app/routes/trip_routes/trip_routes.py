@@ -69,12 +69,7 @@ def join_trip():
     except:
         return jsonify({'Message': 'Specified trip id was not able to be joined, something went wrong'}), 500
 
-@app.route('/api/show_driver_trips', ['GET'])
+@app.route('/api/show_driver_trips', methods=['GET'])
 @jwt_required
 def show_driver_trips():
-    #need to make a look up based on what trips a specific drivers id is, which how can i get the driver id, attach it to user model?
-    # once trips are found based on id, return this trips with ids
-    #make next function to be edit_driver_trips
-    # pass in trip id based on driver id, allow driver to edit details
-    # will be simliar logic for delete trip, only will not allow for editing, will be a button within the edit fiedl
-
+    pass
