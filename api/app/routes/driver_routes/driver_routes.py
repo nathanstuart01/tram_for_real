@@ -21,3 +21,5 @@ def create_driver():
                         }), 201
     except:
         return jsonify({'Message': 'New driver was not able to be created, something went wrong'}), 500
+
+#curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS" -d '{"first_name":"driver_first_1", "last_name":"driver_last_1"}' http://localhost:5000/api/create_driver

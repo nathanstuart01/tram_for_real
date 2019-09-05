@@ -7,14 +7,14 @@ RUN adduser -D tram
 #set working directory
 WORKDIR /home/frontend
 
+#copy all contents in present directory to workdir on container
+COPY . .
+
 #install react
-RUN npx create-react-app frontend
+RUN npm install
 
 #install react-router-for-web
 RUN npm install --save react-router-dom
-
-#copy all contents in present directory to specified directory on container
-COPY . /home/frontend
 
 CMD npm start
 
