@@ -17,4 +17,5 @@ from app.routes import user_routes
 from app.routes.rider_routes import rider_routes
 from app.routes.driver_routes import driver_routes
 from app.routes.trip_routes import trip_routes
+from app.routes.user_routes import user_routes
 from app.models import user, trip, driver, rider

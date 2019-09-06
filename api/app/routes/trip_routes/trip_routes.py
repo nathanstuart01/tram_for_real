@@ -38,6 +38,7 @@ def create_trip():
                         }), 201
     except:
         return jsonify({'Message': 'New trip was not able to be created, something went wrong'}), 500
+#curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"start_location":"test start", "end_location":"test end", "departure_date":"2019-09-01 01:00:00", "return_date":"2019-09-01 06:00:00", "available_seats":4, "driver_id":1}' http://localhost:5000/api/create_trip
 
 @app.route('/api/joinable_trips', methods=['POST'])
 @jwt_required
@@ -52,6 +53,7 @@ def show_joinable_trips():
         return jsonify({'Available Trips for Selected Date': trips}), 200
     except:
         return jsonify({'Message': "Specified trips were not able to be returned, something went wrong"}), 500
+#curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"departure_date":"2019-09-01"}' http://localhost:5000/api/joinable_trips
 
 @app.route('/api/join_trip', methods=['POST'])
 @jwt_required
@@ -72,4 +74,10 @@ def join_trip():
 @app.route('/api/show_driver_trips', methods=['GET'])
 @jwt_required
 def show_driver_trips():
-    pass
+    current_user_info = get_jwt_claims()
+    driver_id = current_user_info['user_id']
+    try:
+        driver_trips = Trip.query.filter(Trip.driver_id == driver_id).all()
+        return jsonify({'Current active driver trips': driver_trips}), 200
+    except:
+        return jsonify({'Message': 'unable to return selected driver trips'}), 500

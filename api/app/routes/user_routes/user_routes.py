@@ -49,7 +49,7 @@ def login_user():
         return resp, 200
     else:
         return jsonify({'message': 'invalid login credentials, please try again'}), 401
-#curl -i -X POST -H "Content-Type: application/json" -d '{"username":"test_user","password":"password"}' http://localhost:5000/api/login
+#curl -i -X POST -H "Content-Type: application/json" -d '{"username":"user","password":"password"}' http://localhost:5000/api/login
 #export ACCESS=
 
 
