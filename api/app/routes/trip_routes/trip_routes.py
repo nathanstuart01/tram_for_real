@@ -70,14 +70,3 @@ def join_trip():
         return jsonify({'This user joined selected trip': rider.id, 'trip available seats': trip_to_join.available_seats}), 200
     except:
         return jsonify({'Message': 'Specified trip id was not able to be joined, something went wrong'}), 500
-
-@app.route('/api/show_driver_trips', methods=['GET'])
-@jwt_required
-def show_driver_trips():
-    current_user_info = get_jwt_claims()
-    driver_id = current_user_info['user_id']
-    try:
-        driver_trips = Trip.query.filter(Trip.driver_id == driver_id).all()
-        return jsonify({'Current active driver trips': driver_trips}), 200
-    except:
-        return jsonify({'Message': 'unable to return selected driver trips'}), 500
