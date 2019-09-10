@@ -36,6 +36,7 @@ def create_user():
                         'email': user.email}), 201
     except:
         return jsonify({'message': 'Something went wrong when registering your username'}), 500
+#curl -i -X POST -H "Content-Type: application/json" -d '{"username":"user_2","email": "test2@test.com", "password":"password"}' http://localhost:5000/api/create_user
 
 @app.route('/api/login', methods=['POST'])
 def login_user():

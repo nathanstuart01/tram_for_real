@@ -33,7 +33,8 @@ def show_driver_trips():
     driver_id = current_user_info['user_id']
     try:
         driver = Driver.query.filter(Driver.user_id == driver_id).first()
-        driver_trips = driver.trips
-        return jsonify({'Current active driver trips': driver_trips}), 200
+        trips = [{'start_location':trip.start_location, 'end_location': trip.end_location, 'departure_date': trip.departure_date, 'return_date': trip.return_date, 'avaiable_seats': trip.available_seats, 'driver_id': trip.driver_id} for trip in driver.trips]
+
+        return jsonify({'Current active driver trips': trips}), 200
     except:
         return jsonify({'Message': 'unable to return selected driver trips'}), 500

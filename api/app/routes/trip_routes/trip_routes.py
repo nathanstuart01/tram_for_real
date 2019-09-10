@@ -2,18 +2,21 @@ from app.app import app, db, jwt
 from app.models.trip import Trip
 from app.models.user import User
 from app.models.rider import Rider
+from app.models.driver import Driver
 from flask import request, jsonify, abort
 from flask_jwt_extended import jwt_required, get_jwt_claims
 
 @app.route('/api/create_trip', methods=['POST'])
 @jwt_required
 def create_trip():
+    current_user_info = get_jwt_claims()
+    user_id = current_user_info['user_id']
+    driver_id = Driver.query.filter(Driver.user_id == user_id).first()
     start_location = request.json.get('start_location')
     end_location = request.json.get('end_location')
     departure_date = request.json.get('departure_date')
     return_date = request.json.get('return_date')
     available_seats = request.json.get('available_seats')
-    driver_id= request.json.get('driver_id')
     if not all([start_location, end_location, departure_date, return_date, available_seats, driver_id]):
         message = 'Invalid trip inputs, please fill in all inputs correctly'
         abort(400, message)
@@ -24,7 +27,7 @@ def create_trip():
                 departure_date=departure_date,
                 return_date=return_date,
                 available_seats=available_seats,
-                driver_id=driver_id,
+                driver_id=driver_id.id,
             )
         db.session.add(trip)
         db.session.commit()
@@ -34,11 +37,11 @@ def create_trip():
                         'Trip departure date': departure_date,
                         'Trip return date': return_date,
                         'Trip available seats': available_seats,
-                        'Trip driver': driver_id,
+                        'Trip driver': driver_id.id,
                         }), 201
     except:
         return jsonify({'Message': 'New trip was not able to be created, something went wrong'}), 500
-#curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"start_location":"test start", "end_location":"test end", "departure_date":"2019-09-01 01:00:00", "return_date":"2019-09-01 06:00:00", "available_seats":4, "driver_id":1}' http://localhost:5000/api/create_trip
+#curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"start_location":"test start", "end_location":"test end", "departure_date":"2019-09-01 01:00:00", "return_date":"2019-09-01 06:00:00", "available_seats":4}' http://localhost:5000/api/create_trip
 
 @app.route('/api/joinable_trips', methods=['POST'])
 @jwt_required
