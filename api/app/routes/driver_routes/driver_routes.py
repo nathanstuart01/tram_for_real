@@ -38,3 +38,7 @@ def show_driver_trips():
         return jsonify({'Current active driver trips': trips}), 200
     except:
         return jsonify({'Message': 'unable to return selected driver trips'}), 500
+
+#curl -i -X GET -H "Authorization: Bearer $ACCESS" -H "Content-Type: application/json" http://localhost:5000/api/show_driver_trips
+
+@app.route('/api/update_driver_trips/<int:driver_id>', methods=['PUT'])
