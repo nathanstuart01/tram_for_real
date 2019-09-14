@@ -73,3 +73,32 @@ def join_trip():
         return jsonify({'This user joined selected trip': rider.id, 'trip available seats': trip_to_join.available_seats}), 200
     except:
         return jsonify({'Message': 'Specified trip id was not able to be joined, something went wrong'}), 500
+
+@app.route('/api/update_trip/<int:trip_id>', methods=['PUT'])
+@jwt_required
+def update_trip(trip_id):
+    trip = Trip.query.filter(Trip.id == trip_id).first()
+    start_location = request.json.get('start_location')
+    end_location = request.json.get('end_location')
+    return_date = request.json.get('return_date')
+    available_seats = request.json.get('available_seats')
+    departure_date = request.json.get('departure_date')
+    if start_location:
+        trip.start_location = start_location
+    if end_location:
+        trip.end_location = end_location
+    if return_date:
+        trip.return_date = return_date
+    if available_seats:
+        trip.available_seats = available_seats
+    if departure_date:
+        trip.departure_date = departure_date
+    db.session.add(trip)
+    db.session.commit()
+    return jsonify({'updated_trip_info': {'updated_trip_start_loc': trip.start_location,
+                                          'updated_trip_end_loc': trip.end_location,
+                                          'updated_trip_dep_date': trip.departure_date,
+                                          'updated_trip_ret_date': trip.return_date,
+                                          'updated_trip_avail_seats': trip.available_seats,
+                                            }
+                    })
