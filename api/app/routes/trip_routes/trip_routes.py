@@ -102,3 +102,17 @@ def update_trip(trip_id):
                                           'updated_trip_avail_seats': trip.available_seats,
                                             }
                     })
+#curl -i -X PUT -H "Authorization: Bearer $ACCESS" -H "Content-Type: application/json" -d '{"return_date":"2019-08-01 16:00:00", "departure_date": "2019-08-01 07:00:00"}' http://localhost:5000/api/update_trip/5
+
+@app.route('/api/delete_trip/<int:trip_id>', methods=['DELETE'])
+@jwt_required
+def delete_trip(trip_id):
+    trip = Trip.query.filter(Trip.id == trip_id).first()
+    try:
+        db.session.delete(trip)
+        db.session.commit()
+        return jsonify('trip deleted successfully')
+    except Exception as e:
+        return jsonify({'unable to delete speficied trip with provided trip id': trip_id})
+
+#curl -i -X DELETE -H "Authorization: Bearer $ACCESS" -H "Content-Type: application/json" http://localhost:5000/api/delete_trip/4
