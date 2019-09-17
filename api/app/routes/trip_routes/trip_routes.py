@@ -43,7 +43,7 @@ def create_trip():
         return jsonify({'Message': 'New trip was not able to be created, something went wrong'}), 500
 #curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"start_location":"test start", "end_location":"test end", "departure_date":"2019-09-01 01:00:00", "return_date":"2019-09-01 06:00:00", "available_seats":4}' http://localhost:5000/api/create_trip
 
-@app.route('/api/joinable_trips', methods=['POST'])
+@app.route('/api/joinable_trips', methods=['GET'])
 @jwt_required
 def show_joinable_trips():
     trip_departure_date = request.json.get('departure_date')
@@ -58,21 +58,24 @@ def show_joinable_trips():
         return jsonify({'Message': "Specified trips were not able to be returned, something went wrong"}), 500
 #curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"departure_date":"2019-09-01"}' http://localhost:5000/api/joinable_trips
 
-@app.route('/api/join_trip', methods=['POST'])
+@app.route('/api/join_trip', methods=['PUT'])
 @jwt_required
 def join_trip():
     trip_id = request.json.get('trip_id')
-    current_user_info = get_jwt_claims()
+    current_user = get_jwt_claims()
+    current_user_id = current_user['user_id']
     if not all([trip_id]):
         message = 'Invalid trip id format, please try inputting trip id again'
         abort(400, message)
     try:
         trip_to_join = Trip.query.filter(Trip.id == trip_id).first()
-        rider = Rider.query.filter(Rider.user_id == current_user_info['user_id']).first()
+        rider = Rider.query.filter(Rider.user_id == current_user_id).first()
         trip_to_join.add_rider_to_trip(rider)  
         return jsonify({'This user joined selected trip': rider.id, 'trip available seats': trip_to_join.available_seats}), 200
     except:
         return jsonify({'Message': 'Specified trip id was not able to be joined, something went wrong'}), 500
+
+#curl -i -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"trip_id":36}' http://localhost:5000/api/join_trip
 
 @app.route('/api/update_trip/<int:trip_id>', methods=['PUT'])
 @jwt_required
