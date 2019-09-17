@@ -9,5 +9,6 @@ class Driver(db.Model):
     trips = db.relationship("Trip", backref="driver", lazy=True)
     #car = # foreign key referencing car table
     #rating = db.Column(db.Integer) this will eventually need to be added in as a rating to sort drivers by rating
+    #photo
 
 
