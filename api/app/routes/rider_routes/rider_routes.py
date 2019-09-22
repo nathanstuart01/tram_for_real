@@ -79,3 +79,4 @@ def cancel_rider_from_trip(trip_id):
         return jsonify({'rider was cancelled from trip': {'trip state date': trip_to_remove_rider.departure_date, 'trip end date': trip_to_remove_rider.return_date, 'trip start location': trip_to_remove_rider.start_location, 'trip end location': trip_to_remove_rider.end_location}}), 200
     except Exception as e:
         return jsonify({'unable to cancel rider from trip': e.args})
+# rider is removed from trip.riders but rider with selected trips still shows up, why??
