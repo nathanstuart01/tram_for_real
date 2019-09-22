@@ -58,9 +58,24 @@ def show_my_trips():
     try:
         for trip in rider_trips:
             driver = Driver.query.filter(Driver.id == trip.driver_id).first()
-            trip_details = {'trip_start': trip.start_location, 'trip_end': trip.end_location, 'trip_start_time': trip.departure_date, 'trip_end_time': trip.return_date, 'trip_seats': trip.available_seats, 'trip_driver_first': driver.first_name, 'trip_driver_last': driver.last_name}
+            trip_details = {'trip id': trip.id, 'trip_start': trip.start_location, 'trip_end': trip.end_location, 'trip_start_time': trip.departure_date, 'trip_end_time': trip.return_date, 'trip_seats': trip.available_seats, 'trip_driver_first': driver.first_name, 'trip_driver_last': driver.last_name}
             trips_info.append(trip_details)
         return jsonify({'rider_trips': trips_info}), 200
     except Exception as e:
         error = e.args
         return jsonify({'Request failed': error }), 500
+#curl -i -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS" http://localhost:5000/api/show_rider_trips
+
+@app.route('/api/cancel_rider_trip/<int:trip_id>', methods=['PUT'])
+@jwt_required
+def cancel_rider_from_trip(trip_id):
+    current_user = get_jwt_claims()
+    current_user_id = current_user['user_id']
+    rider = Rider.query.filter(Rider.user_id == current_user_id).first()
+    rider_id = rider.id
+    trip_to_remove_rider = Trip.query.filter(Trip.id == trip_id).first()
+    trip_to_remove_rider.remove_rider_from_trip(rider_id)
+    try:
+        return jsonify({'rider was cancelled from trip': {'trip state date': trip_to_remove_rider.departure_date, 'trip end date': trip_to_remove_rider.return_date, 'trip start location': trip_to_remove_rider.start_location, 'trip end location': trip_to_remove_rider.end_location}}), 200
+    except Exception as e:
+        return jsonify({'unable to cancel rider from trip': e.args})

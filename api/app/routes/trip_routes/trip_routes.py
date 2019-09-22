@@ -52,30 +52,12 @@ def show_joinable_trips():
         abort(400, message)
     try:
         selected_trips = Trip.query.filter(Trip.departure_date >= trip_departure_date).filter(Trip.available_seats > 0).all()
-        trips = [{'id': trip.id, 'trip_start_location': trip.start_location, 'trip_end_location': trip.end_location, 'trip_start_time': trip.departure_date, 'trip_end_time': trip.return_date, 'trip_seats': trip.available_seats, 'trip_driver': trip.driver_id, 'trip_riders': trip.riders} for trip in selected_trips]
+        # add photo option to rider model to include here for options when joining a trip
+        trips = [{'id': trip.id, 'trip_start_location': trip.start_location, 'trip_end_location': trip.end_location, 'trip_start_time': trip.departure_date, 'trip_end_time': trip.return_date, 'trip_seats': trip.available_seats, 'trip_driver': trip.driver_id, 'trip_riders': [{'rider first': rider.first_name, 'rider last': rider.last_name} for rider in trip.riders]} for trip in selected_trips]
         return jsonify({'Available Trips for Selected Date': trips}), 200
-    except:
-        return jsonify({'Message': "Specified trips were not able to be returned, something went wrong"}), 500
-#curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"departure_date":"2019-09-01"}' http://localhost:5000/api/joinable_trips
-
-@app.route('/api/join_trip', methods=['PUT'])
-@jwt_required
-def join_trip():
-    trip_id = request.json.get('trip_id')
-    current_user = get_jwt_claims()
-    current_user_id = current_user['user_id']
-    if not all([trip_id]):
-        message = 'Invalid trip id format, please try inputting trip id again'
-        abort(400, message)
-    try:
-        trip_to_join = Trip.query.filter(Trip.id == trip_id).first()
-        rider = Rider.query.filter(Rider.user_id == current_user_id).first()
-        trip_to_join.add_rider_to_trip(rider)  
-        return jsonify({'This user joined selected trip': rider.id, 'trip available seats': trip_to_join.available_seats}), 200
-    except:
-        return jsonify({'Message': 'Specified trip id was not able to be joined, something went wrong'}), 500
-
-#curl -i -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"trip_id":36}' http://localhost:5000/api/join_trip
+    except Exception as e:
+        return jsonify({'Message': e.args}), 500
+#curl -i -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS"  -d '{"departure_date":"2019-09-01"}' http://localhost:5000/api/joinable_trips
 
 @app.route('/api/update_trip/<int:trip_id>', methods=['PUT'])
 @jwt_required
