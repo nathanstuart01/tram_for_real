@@ -14,7 +14,7 @@ class Trip(db.Model):
     	back_populates='trips')
     
     def remove_rider_from_trip(self, rider_id):
-        new_riders = [rider for rider in self.riders if rider != rider_id]
+        new_riders = [rider for rider in self.riders if rider.id != rider_id]
         self.riders = new_riders
         self.available_seats = self.available_seats + 1
         db.session.commit()
