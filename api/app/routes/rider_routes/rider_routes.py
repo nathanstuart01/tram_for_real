@@ -79,4 +79,35 @@ def cancel_rider_from_trip(trip_id):
         return jsonify({'rider was cancelled from trip': {'trip state date': trip_to_remove_rider.departure_date, 'trip end date': trip_to_remove_rider.return_date, 'trip start location': trip_to_remove_rider.start_location, 'trip end location': trip_to_remove_rider.end_location}}), 200
     except Exception as e:
         return jsonify({'unable to cancel rider from trip': e.args})
-# rider is removed from trip.riders but rider with selected trips still shows up, why??
+# curl -i -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS" http://localhost:5000/api/cancel_rider_trip/3
+
+@app.route('/api/show_rider', methods=['GET'])
+@jwt_required
+def show_rider_info():
+    current_user_info = get_jwt_claims()
+    rider_id = current_user_info['user_id']
+    try:
+        rider = Rider.query.filter(Rider.user_id == rider_id).first()
+        return jsonify({'rider first name': rider.first_name, 'rider last name': rider.last_name, 'rider id': rider.id}), 200
+    except Exception as e:
+        return jsonify({'error': e.args}), 500
+
+#curl -i -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS" http://localhost:5000/api/show_rider
+
+@app.route('/api/update_rider/<int:rider_id>', methods=['PUT'])
+@jwt_required
+def update_rider(rider_id):
+    rider = Rider.query.filter(Rider.id == rider_id).first()
+    rider_first_name = request.json.get('rider_first_name')
+    rider_last_name = request.json.get('rider_last_name')
+    if rider_first_name:
+        rider.first_name = rider_first_name
+    if rider_last_name:
+        rider.last_name = rider_last_name
+    db.session.add(rider)
+    db.session.commit()
+    return jsonify({'updated_rider_info': {'updated_rider_first_name': rider.first_name,
+                                          'updated_rider_last_name': rider.last_name,
+                                            }
+                    })
+#curl -i -X PUT -H "Authorization: Bearer $ACCESS" -H "Content-Type: application/json" -d '{"rider_first_name":"testy little updated rider first name", "rider_last_name": "testy little updated rider last name"}' http://localhost:5000/api/update_rider/1
