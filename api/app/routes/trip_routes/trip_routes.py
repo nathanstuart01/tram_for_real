@@ -46,12 +46,14 @@ def create_trip():
 @app.route('/api/joinable_trips', methods=['GET'])
 @jwt_required
 def show_joinable_trips():
+    current_user = get_jwt_claims()
+    current_user_id = current_user['user_id']
     trip_departure_date = request.json.get('departure_date')
     if not all([trip_departure_date]):
         message = 'Invalid trip date, please try inputting trip date again'
         abort(400, message)
     try:
-        selected_trips = Trip.query.filter(Trip.departure_date >= trip_departure_date).filter(Trip.available_seats > 0).all()
+        selected_trips = Trip.query.join(Driver).filter(Trip.departure_date >= trip_departure_date).filter(Trip.available_seats > 0).filter(Driver.user_id != current_user_id).all()
         # add photo option to rider model to include here for options when joining a trip
         trips = [{'id': trip.id, 'trip_start_location': trip.start_location, 'trip_end_location': trip.end_location, 'trip_start_time': trip.departure_date, 'trip_end_time': trip.return_date, 'trip_seats': trip.available_seats, 'trip_driver': trip.driver_id, 'trip_riders': [{'rider first': rider.first_name, 'rider last': rider.last_name} for rider in trip.riders]} for trip in selected_trips]
         return jsonify({'Available Trips for Selected Date': trips}), 200

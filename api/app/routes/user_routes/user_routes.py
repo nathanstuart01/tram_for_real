@@ -1,4 +1,4 @@
-from app.app import app, db, jwt
+from app.app import app, db, jwt, blacklist
 from app.models.user import User
 from flask import request, jsonify, abort
 from flask_jwt_extended import (JWTManager, create_access_token, create_refresh_token, 
@@ -38,6 +38,7 @@ def create_user():
         return jsonify({'message': 'Something went wrong when registering your username'}), 500
 #curl -i -X POST -H "Content-Type: application/json" -d '{"username":"user_2","email": "test2@test.com", "password":"password"}' http://localhost:5000/api/create_user
 
+# endpoint for granting a user an access token
 @app.route('/api/login', methods=['POST'])
 def login_user():
     username = request.json.get('username')
@@ -52,6 +53,34 @@ def login_user():
         return jsonify({'message': 'invalid login credentials, please try again'}), 401
 #curl -i -X POST -H "Content-Type: application/json" -d '{"username":"user","password":"password"}' http://localhost:5000/api/login
 #export ACCESS=
+
+# Endpoint for revoking the current users access token, #still able to access protected routes after getting sign out successful 
+@app.route('/api/logout', methods=['DELETE'])
+@jwt_required
+def logout():
+    jti = get_raw_jwt()['jti']
+    blacklist.add(jti)
+    return jsonify({"msg": "Successfully logged out"}), 200
+
+@app.route('/api/update_user_password', methods=['PUT'])
+@jwt_required
+def update_user_password():
+    current_user_info = get_jwt_claims()
+    user_id = current_user_info['user_id']
+    user = User.query.filter(User.id == user_id).first()
+    user_new_password = request.json.get('user_new_password')
+    user_confirm_new_password = request.json.get('user_confirm_new_password')
+    if user_new_password == user_confirm_new_password:
+        try:
+            user.set_password(user_confirm_new_password)
+            db.session.add(user)
+            db.session.commit()
+            return jsonify({'updated_user_password': 'Your password was updated successfully!' }), 200
+        except Exception as e:
+            return jsonify({'unable to update user password': e.ergs }), 500
+    else:
+        return jsonify({'unable to update user password': 'passwords do not match'}), 500
+#curl -i -X PUT -H "Authorization: Bearer $ACCESS" -H "Content-Type: application/json" -d '{"user_new_password":"password", "user_confirm_new_password": "password"}' http://localhost:5000/api/update_user_password
 
 
 

@@ -12,6 +12,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+blacklist = set()
 
 from app.routes import user_routes
 from app.routes.rider_routes import rider_routes
