@@ -10,6 +10,7 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY')
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
     JWT_BLACKLIST_ENABLED = os.environ.get('JWT_BLACKLIST_ENABLED')
+    JWT_BLACKLIST_TOKEN_CHECKS = os.environ.get('JWT_BLACKLIST_TOKEN_CHECKS')
 
 class ProductionConfig(Config):
     DATABASE_URI = ''

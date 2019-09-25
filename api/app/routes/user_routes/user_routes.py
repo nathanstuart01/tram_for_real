@@ -14,6 +14,11 @@ def add_claims_to_access_token(identity):
         'username': identity['username']
     }
 
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return jti in blacklist
+
 @app.route('/api/create_user', methods=['POST'])
 def create_user():
     username = request.json.get('username')
@@ -61,6 +66,8 @@ def logout():
     jti = get_raw_jwt()['jti']
     blacklist.add(jti)
     return jsonify({"msg": "Successfully logged out"}), 200
+
+#curl -i -X DELETE -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS" http://localhost:5000/api/logout
 
 @app.route('/api/update_user_password', methods=['PUT'])
 @jwt_required
