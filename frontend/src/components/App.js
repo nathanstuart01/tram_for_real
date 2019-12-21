@@ -9,10 +9,11 @@ import UserHomePage from './userHomePage';
 const  App = () => (
       <div>
         <Switch>
-            <Route path="/" exact={true} component={Login} />
-            <Route path='/signup' exact={true} component={Signup} />
-            <Route path='/user_home_page' exact={true} component={UserHomePage} />
-            <Route component={NotFound} />
+            <Route exact path="/" exact={true} component={Login} />
+            <Route exact path='/signup' exact={true} component={Signup} />
+            // protected routes
+            <Route exact path='/user_home_page' exact={true} component={UserHomePage} />
+            <Route exact component={NotFound} />
         </Switch>
       </div>
 )

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -7,20 +7,34 @@ const styles = StyleSheet.create({
     backgroundColor: 'skyblue',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'green',
     fontWeight: 'bold',
   },
 });
 
-class SignIn extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {username: '', password: ''};
+class SignIn extends React.Component {
+  
+  state = {username: '', password: ''};
+
+  authenticate = () => {
+    let {username, password} = this.state;
+    console.log({username, password});
+    fetch("http://localhost:5000/api/login", {
+            method: "POST",
+            body: JSON.stringify({username, password}),
+            headers: {
+              "Content-Type": "application/json"
+            },
+        }).then(res => {
+          return res.json()
+        }).then(data =>{
+          console.log(data)
+        })
+        .catch(error => console.error('Error:', error)); 
   }
 
   render() {
     return (
-      <View style={{color: 'red'}}>
+      <View>
         <Text>Sign In</Text>
         <TextInput
           style={{height:80, width: 80}}
@@ -35,9 +49,7 @@ class SignIn extends Component {
         value={this.state.password}
         />
         <Button 
-          onPress={() => {
-            alert(this.state.password);
-          }}
+          onPress={this.authenticate}
           title="Sign In"
         />
       </View>
@@ -47,7 +59,7 @@ class SignIn extends Component {
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <View>
       <SignIn />
     </View>
   );

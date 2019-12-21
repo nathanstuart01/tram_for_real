@@ -16,6 +16,8 @@ WORKDIR /home/tram
 #install all app dependicies and packages
 RUN pip install -r requirements.txt
 
+RUN pip install -U flask-cors
+
 #set flask env variable within container
 ENV FLASK_APP run.py
 

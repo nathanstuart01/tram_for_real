@@ -1,11 +1,11 @@
 from app.app import app, db, jwt, blacklist
 from app.models.user import User
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, make_response
 from flask_jwt_extended import (JWTManager, create_access_token, create_refresh_token, 
                                 jwt_required, jwt_refresh_token_required, 
                                 get_jwt_identity, get_raw_jwt, get_jwt_claims,
                                 set_access_cookies, set_refresh_cookies, unset_jwt_cookies)
-
+from flask_cors import cross_origin
 
 @jwt.user_claims_loader
 def add_claims_to_access_token(identity):
@@ -44,7 +44,8 @@ def create_user():
 #curl -i -X POST -H "Content-Type: application/json" -d '{"username":"user_2","email": "test2@test.com", "password":"password"}' http://localhost:5000/api/create_user
 
 # endpoint for granting a user an access token
-@app.route('/api/login', methods=['POST'])
+@app.route('/api/login', methods=['POST', 'OPTIONS'])
+@cross_origin()
 def login_user():
     username = request.json.get('username')
     password = request.json.get('password')
@@ -52,10 +53,9 @@ def login_user():
     if user and user.check_password(password):
         user_object = {"user_id": user.id, "username": username}
         access_token = create_access_token(identity=user_object)
-        resp = jsonify({'login': True, 'access_token': access_token})
-        return resp, 200
+        return jsonify({'login': True, 'access_token': access_token}), 200
     else:
-        return jsonify({'message': 'invalid login credentials, please try again'}), 401
+        return jsonify({'message': 'invalid login credentials, please try again'}), 401, {'Access-Control-Allow-Origin':'*'}
 #curl -i -X POST -H "Content-Type: application/json" -d '{"username":"user","password":"password"}' http://localhost:5000/api/login
 #export ACCESS=
 
