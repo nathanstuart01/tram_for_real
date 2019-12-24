@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/styles.css';
 import { Link, Redirect } from 'react-router-dom';
-import {login, logout } from './Auth';
+import {login } from './Auth';
 
 class Login extends React.Component {
         //eventually make a function for email that makes an authenticated user
@@ -40,7 +40,7 @@ class Login extends React.Component {
     render() {
         return (
         <div>
-            <h1>Tram Home Page with Information about the Ride Board App</h1>
+            { localStorage.getItem('token') ? <Redirect to='/user_home_page' /> : <div><h1>Tram Home Page with Information about the Ride Board App</h1>
             <h2>Login to tram</h2>
             <form onSubmit={this.authenticate}>
                 <input id='username' type='text' autoFocus required placeholder='Username' onChange={this.handleChange} />
@@ -48,7 +48,8 @@ class Login extends React.Component {
                 <input type='submit' value='Submit' />
             </form>
             <Link to ='/register'>New User? Register for Tram here</Link>
-            <button onClick={logout}>Log Out</button>
+            </div>
+            }
         </div>
         );
     }
