@@ -13,7 +13,10 @@ export const authenticatedUser = () => {
 }
 
 export const login = (result) => {
+    console.log(result);
+    console.log(user)
     Object.keys(user).forEach(key => {
+        debugger
         localStorage.setItem( user[key], result[key] );
     });
 }
@@ -33,6 +36,16 @@ export const auth = (user, endpoint, cb) => {
             },
             body: JSON.stringify({...user})
         }).then(res => res.json())
-            .then( result => login(result) )
+            .then( result => {
+                if (result['login'] === true) {
+                    login(result)
+                }
+                else {
+                    console.log('Invalid login credentials');
+                }
+            })
             .then( () => cb() )
+            .catch( error => {
+                console.log(error.message);
+            })
         }
