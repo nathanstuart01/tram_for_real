@@ -1,6 +1,6 @@
 import { BASE_URL } from './Url';
 
-const user = { client: 'client', email: 'email', token: 'token', nickname: 'nickname'};
+const user = { access_token: 'token', login: 'False'};
 
 export const authenticatedUser = () => {
     let currentUser = {};
@@ -13,11 +13,8 @@ export const authenticatedUser = () => {
 }
 
 export const login = (result) => {
-    console.log(result);
-    console.log(user)
     Object.keys(user).forEach(key => {
-        debugger
-        localStorage.setItem( user[key], result[key] );
+        localStorage.setItem( key, result[key] );
     });
 }
 
