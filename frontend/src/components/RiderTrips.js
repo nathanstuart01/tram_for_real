@@ -1,17 +1,17 @@
 import React from 'react';
 import { BASE_URL } from './Url';
 
-const endpoint = 'show_driver_trips';
+const endpoint = 'show_rider_trips';
 
 const handleTrips = (trips) => {
-    var trips = trips['Current active driver trips'];
+    var trips = trips['rider_trips'];
     var i;
     for (i = 0; i < trips.length; i++) {
         console.log(trips[i]);
     }
 }
 
-const getDriverTrips = (token) => {
+const getRiderTrips = (token) => {
     fetch(`${BASE_URL}/${endpoint}`, {
             method: 'GET',
             headers: {
@@ -28,13 +28,13 @@ const getDriverTrips = (token) => {
             })
         }
 
-const DriverTrips = () => {
+const RiderTrips = () => {
 
-    var trips = getDriverTrips(localStorage.getItem('access_token'))
+    //var trips = getRiderTrips(localStorage.getItem('access_token'))
 
     return (
-    <div><h3>Driver Trips</h3></div>
+    <div><h3>My Rider Trips</h3></div>
     );
 }
 
-export default DriverTrips;
+export default RiderTrips;
