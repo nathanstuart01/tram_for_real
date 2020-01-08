@@ -15,6 +15,8 @@ RUN npm install
 
 #install react-router-for-web
 RUN npm install --save react-router-dom
+#install bootstrap for css styling
+RUN npm install react-bootstrap bootstrap
 
 CMD npm start
 

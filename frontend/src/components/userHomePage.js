@@ -10,7 +10,7 @@ class UserHomePage extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { trips: []};
+        this.state = { driverTrips: [], riderTrips: [] };
       }
 
     getDriverTrips = (token) => {
@@ -22,7 +22,23 @@ class UserHomePage extends React.Component {
                 },
             }).then(res => res.json())
                 .then( result => {
-                    this.setState({trips: result['Current active driver trips']});
+                    this.setState({driverTrips: result['Current active driver trips']});
+                })
+                .catch( error => {
+                    console.log(error.message);
+                })
+            }
+    
+    getRiderTrips = (token) => {
+        fetch(`${BASE_URL}/${'show_rider_trips'}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            }).then(res => res.json())
+                .then( result => {
+                    this.setState({driverTrips: result['rider_trips']});
                 })
                 .catch( error => {
                     console.log(error.message);
@@ -32,14 +48,15 @@ class UserHomePage extends React.Component {
     componentDidMount() {
         var token = localStorage.getItem('access_token');
         this.getDriverTrips(token);
+        this.getRiderTrips(token);
     }
     
     render(){
 
         return (
             <div>Authenticated User Home Page
-                <DriverTrips driverTrips={this.state.trips} />
-                <div id='riderTrips'><RiderTrips /></div>
+                <DriverTrips driverTrips={this.state.driverTrips} />
+                <RiderTrips riderTrips={this.state.riderTrips} />
                 <button onClick={ (history) => {logout(); this.props.history.push('/')}}>Logout</button>
             </div>
             
