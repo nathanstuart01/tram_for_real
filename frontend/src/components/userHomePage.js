@@ -38,7 +38,7 @@ class UserHomePage extends React.Component {
                 },
             }).then(res => res.json())
                 .then( result => {
-                    this.setState({driverTrips: result['rider_trips']});
+                    this.setState({riderTrips: result['rider_trips']});
                 })
                 .catch( error => {
                     console.log(error.message);

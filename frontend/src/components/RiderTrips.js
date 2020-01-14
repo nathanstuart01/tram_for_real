@@ -2,16 +2,12 @@ import React from 'react';
 
 class RiderTrips extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
         render() {
             let trips = this.props.riderTrips.map( (trip) => {
                 return (
-                    <ul key={trip.trip_id}>
+                    <ul key={`trip.trip_id`}>
                         <li>
-                            <h6>Trip Date: {trip.departure_date}</h6>
+                            <h6>Trip Date: {trip.trip_start_time}</h6>
                         </li>
                     </ul>
                 );

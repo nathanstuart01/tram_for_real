@@ -1,10 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import ShowDriverTrips from './ShowDriverTrips';
 
 class DriverTrips extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
 
         render() {
             let trips = this.props.driverTrips.map( (trip) => {
@@ -12,6 +10,7 @@ class DriverTrips extends React.Component {
                     <ul key={trip.trip_id}>
                         <li>
                             <h6>Trip Date: {trip.departure_date}</h6>
+                            <Link to={{ pathname: '/show_driver_trip', state: { trip: 'testy'} }}>Show Trip Details</Link>
                         </li>
                     </ul>
                 );
