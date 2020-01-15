@@ -10,7 +10,7 @@ class DriverTrips extends React.Component {
                     <ul key={trip.trip_id}>
                         <li>
                             <h6>Trip Date: {trip.departure_date}</h6>
-                            <Link to={{ pathname: '/show_driver_trip', state: { trip: 'testy'} }}>Show Trip Details</Link>
+                            <Link to={{ pathname: '/show_driver_trip', state: { trip } }}>Show Trip Details</Link>
                         </li>
                     </ul>
                 );

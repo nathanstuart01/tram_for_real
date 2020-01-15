@@ -2,11 +2,9 @@ import React from 'react';
 
 class ShowDriverTrips extends React.Component {
 
-    state = { edit: 'False', car: {} }
+    state = { edit: false, car: {} }
 
     componentDidMount() {
-        const { trip } = this.props;
-        console.log(trip);
     }
 
     edit = () => {
@@ -16,9 +14,19 @@ class ShowDriverTrips extends React.Component {
     }
 
     show = () => {
-        return (
-            <div>Show Driver Trip</div>
-        )
+        let trip = this.props.location.state.trip;
+        console.log(trip);
+        if(Object.keys(trip).length) {
+            return (
+                <div>
+                <h1>Trip Details</h1>
+                <h4>{trip.departure_date}</h4>
+                </div>
+            )
+        }
+        else {
+            return (<h3>You Have No Created Trips, Please Create One</h3>)
+        }
     }
 
     render() {
