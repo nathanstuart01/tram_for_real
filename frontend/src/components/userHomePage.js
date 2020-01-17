@@ -52,7 +52,6 @@ class UserHomePage extends React.Component {
     }
     
     render(){
-
         return (
             <div>Authenticated User Home Page
                 <DriverTrips driverTrips={this.state.driverTrips} />

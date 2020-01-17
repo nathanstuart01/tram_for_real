@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter} from 'react-router-dom';
 
 class ShowDriverTrips extends React.Component {
 
@@ -11,15 +12,48 @@ class ShowDriverTrips extends React.Component {
         this.setState({ edit: !this.state.edit });
     }
 
-    edit = () => {
-        let trip = this.state
+    handleSubmit = (e) => {
+        e.preventDeafult();
+        let departureDate = this.refs.departureDate;
+        let returnDate = this.refs.returnDate;
+        let startLocation = this.refs.startLocation;
+        let endLocation = this.refs.endLocation;
+        let avaiableSeats = this.refs.avaiableSeats;
+        this.props.history.push('/user_home_page');
+
+    }
+
+    edit = (edit_trip) => {
+        let trip = edit_trip;
         return (
-            <div>Edit Driver Trip</div>
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <h1>Edit Driver Trip</h1>
+                    <h6>Trip Name:</h6>
+                    <h6>(Update Trip Model to Include Trip Name)</h6>
+                    <h6>Date:</h6>
+                    <input ref='departureDate' type='text' required placeholder='Trip Departure Date' defaultValue={trip.departure_date} />
+                    <br />
+                    <h6>Return Date:</h6>
+                    <input ref='returnDate' type='text' required placeholder='Trip Return Date' defaultValue={trip.return_date} />
+                    <br />
+                    <h6>Start Location:</h6>
+                    <input ref='startLocation' type='text' required placeholder='Trip Start Location' defaultValue={trip.start_location} />
+                    <br />
+                    <h6>End Location:</h6>
+                    <input ref='endLocation' type='text' required placeholder='Trip End Location' defaultValue={trip.end_location} />
+                    <br />
+                    <h6>Available Seats:</h6>
+                    <input ref='availableSeats' type='text' required placeholder='Trip Available Seats' defaultValue={trip.avaiable_seats} />
+                    <br />
+                    <input type='submit' />
+                </form>
+            </div>
         )
     }
 
-    show = () => {
-        let trip = this.props.location.state.trip;
+    show = (show_trip) => {
+        let trip = show_trip || {};
         if(Object.keys(trip).length) {
             return (
                 <div>
@@ -42,9 +76,9 @@ class ShowDriverTrips extends React.Component {
 
     render() {
         return (
-            this.state.edit ? this.edit() : this.show ()
+            this.state.edit ? this.edit(this.props.location.state.trip) : this.show(this.props.location.state.trip)
         )
     }
 }
 
-export default ShowDriverTrips;
+export default withRouter(ShowDriverTrips);

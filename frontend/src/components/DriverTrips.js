@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import ShowDriverTrips from './ShowDriverTrips';
 
 class DriverTrips extends React.Component {
@@ -10,7 +10,7 @@ class DriverTrips extends React.Component {
                     <ul key={trip.trip_id}>
                         <li>
                             <h6>Trip Date: {trip.departure_date}</h6>
-                            <Link to={{ pathname: '/show_driver_trip', state: { trip } }}>Show Trip Details</Link>
+                            <Link to={{ pathname: '/show_driver_trip', state: { trip } }} history={this.props.history}>Show Trip Details</Link>
                         </li>
                     </ul>
                 );
@@ -30,4 +30,4 @@ class DriverTrips extends React.Component {
         }
     }   
 
-export default DriverTrips;
+export default withRouter(DriverTrips);
