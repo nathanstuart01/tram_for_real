@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ShowDriverTrips from './ShowDriverTrips';
 
 class DriverTrips extends React.Component {
@@ -30,4 +30,4 @@ class DriverTrips extends React.Component {
         }
     }   
 
-export default withRouter(DriverTrips);
+export default DriverTrips;

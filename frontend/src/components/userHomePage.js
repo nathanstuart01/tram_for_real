@@ -1,5 +1,4 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
 import { logout } from './Auth';
 import { authenticatedUser } from './Auth';
 import DriverTrips  from './DriverTrips';
@@ -63,4 +62,4 @@ class UserHomePage extends React.Component {
     }
 }
 
-export default withRouter(UserHomePage);
+export default UserHomePage;

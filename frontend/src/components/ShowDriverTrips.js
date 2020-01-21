@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter} from 'react-router-dom';
+import { BASE_URL } from './Url';
 
 class ShowDriverTrips extends React.Component {
 
@@ -12,15 +12,38 @@ class ShowDriverTrips extends React.Component {
         this.setState({ edit: !this.state.edit });
     }
 
+    updateTrip = (departureDate, returnDate, startLocation, endLocation, avaiableSeats) => {
+        let tripId = this.props.location.state.trip.trip_id;
+        let token = localStorage.getItem('access_token');
+        console.log(`${BASE_URL}/${'update_trip'}/${tripId}`);
+        fetch(`${BASE_URL}/${'update_trip'}/${tripId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({start_location: startLocation})
+        }).then(res => res.json())
+            .then( result => {
+                console.log(result);
+                // flash message via react??
+                this.props.history.push('/user_home_page');
+            })
+            .catch( error => {
+                console.log(error.message);
+            })
+
+        this.props.history.push('/user_home_page');
+    }
+
     handleSubmit = (e) => {
-        e.preventDeafult();
+        e.preventDefault();
         let departureDate = this.refs.departureDate;
         let returnDate = this.refs.returnDate;
         let startLocation = this.refs.startLocation;
         let endLocation = this.refs.endLocation;
         let avaiableSeats = this.refs.avaiableSeats;
-        this.props.history.push('/user_home_page');
-
+        this.updateTrip(departureDate, returnDate, startLocation, endLocation, avaiableSeats);
     }
 
     edit = (edit_trip) => {
@@ -81,4 +104,4 @@ class ShowDriverTrips extends React.Component {
     }
 }
 
-export default withRouter(ShowDriverTrips);
+export default ShowDriverTrips;
