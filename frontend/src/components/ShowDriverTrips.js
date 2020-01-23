@@ -12,10 +12,9 @@ class ShowDriverTrips extends React.Component {
         this.setState({ edit: !this.state.edit });
     }
 
-    updateTrip = (departureDate, returnDate, startLocation, endLocation, avaiableSeats) => {
+    updateTrip = (departureDate, returnDate, startLocation, endLocation, availableSeats) => {
         let tripId = this.props.location.state.trip.trip_id;
         let token = localStorage.getItem('access_token');
-        console.log(`${BASE_URL}/${'update_trip'}/${tripId}`);
         fetch(`${BASE_URL}/${'update_trip'}/${tripId}`, {
             method: 'PUT',
             headers: {
@@ -27,6 +26,7 @@ class ShowDriverTrips extends React.Component {
             .then( result => {
                 console.log(result);
                 // flash message via react??
+                // state is not updated and as such need to do a refresh, which is unacceptable. Need to figure something out here
                 this.props.history.push('/user_home_page');
             })
             .catch( error => {
@@ -38,12 +38,12 @@ class ShowDriverTrips extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let departureDate = this.refs.departureDate;
-        let returnDate = this.refs.returnDate;
-        let startLocation = this.refs.startLocation;
-        let endLocation = this.refs.endLocation;
-        let avaiableSeats = this.refs.avaiableSeats;
-        this.updateTrip(departureDate, returnDate, startLocation, endLocation, avaiableSeats);
+        let departureDate = this.refs.departureDate.value;
+        let returnDate = this.refs.returnDate.value;
+        let startLocation = this.refs.startLocation.value;
+        let endLocation = this.refs.endLocation.value;
+        let availableSeats = this.refs.availableSeats.value;
+        this.updateTrip(departureDate, returnDate, startLocation, endLocation, availableSeats);
     }
 
     edit = (edit_trip) => {
