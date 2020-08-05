@@ -21,7 +21,7 @@ class ShowDriverTrips extends React.Component {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({start_location: startLocation})
+            body: JSON.stringify({start_location: startLocation, end_location: endLocation, return_date: returnDate,  available_seats: availableSeats, departure_date: departureDate})
         }).then(res => res.json())
             .then( result => {
                 console.log(result);
