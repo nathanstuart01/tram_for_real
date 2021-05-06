@@ -5,4 +5,4 @@ psycopg2==2.7.7
 flask-login==0.4.1
 flask-bcrypt==0.7.1
 Flask-JWT-Extended==3.17.0
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
